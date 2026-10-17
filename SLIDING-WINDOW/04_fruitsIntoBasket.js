@@ -37,21 +37,38 @@ Explanation: We can pick from trees.
 If we had started at the first tree, we would only pick from trees.
 */
 
-class Solution {
-    totalFruit(fruits) {
-        
-        return 0;
+function totalFruit(fruits) {
+    let n = fruits.length;
+
+    let basket = {};
+    let res = 0;
+    let low = 0;
+    
+    for(let high = 0; high < n; high++){
+        basket[fruits[high]] = (basket[fruits[high]] || 0) + 1;
+
+        let basketLen = Object.keys(basket).length;
+        while(basketLen > 2){
+            basket[fruits[low]] -= 1;
+            if(basket[fruits[low]] === 0){
+                delete basket[fruits[low]];
+            }
+            low++;
+            basketLen = Object.keys(basket).length;
+        }
+
+        res = Math.max(res, high-low+1);
     }
+    return res;
 }
 
 // --- TEST RUNNER ---
-const solver = new Solution();
 
 const fruits1 = [1, 2, 1];
-console.log("Test 1 Result:", solver.totalFruit(fruits1)); // Expected Output: 3
+console.log("Test 1 Result:", totalFruit(fruits1)); // Expected Output: 3
 
 const fruits2 = [0, 1, 2, 2];
-console.log("Test 2 Result:", solver.totalFruit(fruits2)); // Expected Output: 3
+console.log("Test 2 Result:", totalFruit(fruits2)); // Expected Output: 3
 
 const fruits3 = [1, 2, 3, 2, 2];
-console.log("Test 3 Result:", solver.totalFruit(fruits3)); // Expected Output: 4
+console.log("Test 3 Result:", totalFruit(fruits3)); // Expected Output: 4
